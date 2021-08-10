@@ -1,4 +1,4 @@
-[[!Build Status](https://app.travis-ci.com/donaldRwilliams/spikeslab.svg?branch=main)](https://travis-ci.com/donaldRwilliams/spikeslab)
+[![Build Status](https://travis-ci.com/CVxTz/DeepTabular.svg?branch=master)](https://travis-ci.com/CVxTz/DeepTabular)
 
 # spikeslab
 spike and slab feature selection in python
