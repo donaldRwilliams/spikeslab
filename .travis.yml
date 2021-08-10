@@ -5,4 +5,4 @@ python:
   - "3.8"
 cache: pip
 script:
-  - pytest tests/
+  - tests/test_models.py
