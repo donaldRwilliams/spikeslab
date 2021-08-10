@@ -7,6 +7,9 @@ install:
   - pip install codecov
   - pip install pytest-cov
   - pip install .
+script:
+  - pytest --cov-report=xml --cov=deeptabular tests/
+  
 after_success:
   - codecov
 deploy:
