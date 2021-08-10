@@ -12,7 +12,7 @@ def read(fname):
 
 
 setup(
-    name="deeptabular",
+    name="pyjags",
     version="0.0.1",
     author="Donald R. Williams",
     author_email="drwwilliams@ucdavis.edu",
