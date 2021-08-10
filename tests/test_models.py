@@ -1,3 +1,4 @@
 import pytest
 
-print(1 + 1)
+def test_testing():
+    print(1 + 1)
