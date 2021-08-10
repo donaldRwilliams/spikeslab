@@ -8,8 +8,8 @@ install:
   - pip install pytest-cov
   - pip install .
 script:
-  - pytest --cov-report=xml --cov=deeptabular tests/
-  
+  - pytest --cov-report=xml --cov=spikeslab tests/
+
 after_success:
   - codecov
 deploy:
