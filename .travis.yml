@@ -9,5 +9,5 @@ os:
 script:
   - pytest
 before_install:
-  - sudo add-apt-repository ppa:marutter/rrutter -y
+  - sudo apt-get install jags
   - sudo apt-get update
