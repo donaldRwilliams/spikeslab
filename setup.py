@@ -21,7 +21,7 @@ TEST_REQUIRES = [
 ]
 
 setup(
-    name="pyjags",
+    name="PySpikeSlab",
     version="0.0.1",
     author="Donald R. Williams",
     author_email="drwwilliams@ucdavis.edu",
@@ -29,7 +29,7 @@ setup(
     license="MIT",
     keywords="Bayesian",
     url="https://github.com/donaldRwilliams/spikeslab",
-    packages=["spikeslab"],
+    packages=["PySpikeSlab"],
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT Licence',
