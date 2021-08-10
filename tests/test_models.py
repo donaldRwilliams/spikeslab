@@ -1,1 +1,3 @@
-1 + 1
+import pytest
+
+print(1 + 1)
