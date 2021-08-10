@@ -11,6 +11,15 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
+TEST_REQUIRES = [
+    # testing and coverage
+    'pytest', 'coverage', 'pytest-cov',
+    # unmandatory dependencies of the package itself
+    'pandas', 'lime',
+    # to be able to run `python setup.py checkdocs`
+    'collective.checkdocs', 'pygments',
+]
+
 setup(
     name="pyjags",
     version="0.0.1",
@@ -36,5 +45,8 @@ setup(
     install_requires=[
         'pyjags',
         'numpy'
-    ]
+    ],
+    extras_require={
+        'test': TEST_REQUIRES,
+    },
 )
