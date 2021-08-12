@@ -1,8 +1,6 @@
 def make_model_code(family = "gaussian", 
                     prior = "normal", 
                     ss_type = "ssvs", 
-                    scale_sl = 1,
-                    scale_sp = 0.01,
                     pi = 0.5):
     if family == "gaussian":
         lik = '''
@@ -29,8 +27,8 @@ def make_model_code(family = "gaussian",
                 }
             ''' 
     elif family == "student_t":
-            lik = '''
-            model{
+        lik = '''
+        model{
             for (i in 1:N){
                 mu[i]  <- alpha + inprod(X[i,], beta)
                 y[i] ~ dt(mu[i], prec, nu)
@@ -68,9 +66,17 @@ def make_model_code(family = "gaussian",
         elif prior == "lasso":
                 coefs = ''' 
                 for(i in 1:p){
-                    pi[i] ~ dbern(0.5)
+                    gamma[i] ~ dbern(pi)
                     beta_sl[i] ~ ddexp(0, pow(scale_sl, -2))
                     beta[i] <- (gamma[i] * beta_sl[i])
+                }
+            '''
+        elif ss_type == "invlog":
+                coefs = ''' 
+                for(i in 1:p){
+                    lambda_hat[i] ~ dnorm(0, pow(scale_sl, -2))
+                    sp_raw[i] ~ dnorm(0, 1)
+                    beta[i] <- (tau * beta_sl[i] * ilogit(lambda_hat[i]))
                 }
             '''
     priors = '''
