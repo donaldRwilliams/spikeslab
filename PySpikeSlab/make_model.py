@@ -1,10 +1,15 @@
-def make_model_code(family = "gaussian", prior = "normal", ss_type = "ssvs"):
+def make_model_code(family = "gaussian", 
+                    prior = "normal", 
+                    ss_type = "ssvs", 
+                    scale_sl = 1,
+                    scale_sp = 0.01,
+                    pi = 0.5):
     if family == "gaussian":
         lik = '''
         model{
             for (i in 1:N){
                 mu[i]  <- alpha + inprod(X[i,], beta)
-                y[i] ~ dnorm(mu[i], tau)
+                y[i] ~ dnorm(mu[i], prec)
                 }
             ''' 
     elif family == "binomial":
@@ -23,46 +28,55 @@ def make_model_code(family = "gaussian", prior = "normal", ss_type = "ssvs"):
                 y[i] ~ dpois(mu[i])
                 }
             ''' 
+    elif family == "student_t":
+            lik = '''
+            model{
+            for (i in 1:N){
+                mu[i]  <- alpha + inprod(X[i,], beta)
+                y[i] ~ dt(mu[i], prec, nu)
+                }
+            nu ~ rgamma(2, 10)
+            ''' 
     if ss_type == "ssvs":
         if prior == "normal":
                coefs = ''' 
                for(i in 1:p){
-                   pi[i] ~ dbern(0.5)
-                   beta_sl[i] ~ dnorm(0, 0.01)
-                   beta_sp[i] ~ dnorm(0, pow(0.01, -2))
-                   beta[i] <- (pi[i] * beta_sl[i]) + ((1 - pi[i]) * beta_sp[i])
+                   gamma[i] ~ dbern(pi)
+                   beta_sl[i] ~ dnorm(0, pow(scale_sl, -2))
+                   beta_sp[i] ~ dnorm(0, pow(scale_sp, -2))
+                   beta[i] <- (gamma[i] * beta_sl[i]) + ((1 - gamma[i]) * beta_sp[i])
                 }
              '''
         elif prior == "lasso":
                 coefs = ''' 
                 for(i in 1:p){
-                    pi[i] ~ dbern(0.5)
-                    beta_sl[i] ~ ddexp(0, 0.01)
-                    beta_sp[i] ~ ddexp(0, pow(0.01, -2))
-                    beta[i] <- (pi[i] * beta_sl[i]) + ((1 - pi[i]) * beta_sp[i])
+                    gamma[i] ~ dbern(pi)
+                    beta_sl[i] ~ ddexp(0, pow(scale_sl, -2))
+                    beta_sp[i] ~ ddexp(0, pow(scale_sp, -2))
+                    beta[i] <- (gamma[i] * beta_sl[i]) + ((1 - gamma[i]) * beta_sp[i])
                 }
             '''
     elif ss_type == "km":
         if prior == "normal":
                coefs = ''' 
                for(i in 1:p){
-                   pi[i] ~ dbern(0.5)
-                   beta_sl[i] ~ dnorm(0, 0.01)
-                   beta[i] <- (pi[i] * beta_sl[i])
+                   gamma[i] ~ dbern(pi)
+                   beta_sl[i] ~ dnorm(0, pow(scale_sl, -2))
+                   beta[i] <- (gamma[i] * beta_sl[i])
                 }
              '''
         elif prior == "lasso":
                 coefs = ''' 
                 for(i in 1:p){
                     pi[i] ~ dbern(0.5)
-                    beta_sl[i] ~ ddexp(0, 0.01)
-                    beta[i] <- (pi[i] * beta_sl[i])
+                    beta_sl[i] ~ ddexp(0, pow(scale_sl, -2))
+                    beta[i] <- (gamma[i] * beta_sl[i])
                 }
             '''
     priors = '''
             alpha ~ dnorm(0, 0.01)
-            sigma ~ dunif(0, 1000)
-            tau <- 1/ (sigma * sigma)
+            prec ~ dgamma(0.001, 0.001)
+            sigma <- sqrt(1 / prec)
             }'''
     
     return lik + coefs + priors
