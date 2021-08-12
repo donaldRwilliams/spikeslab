@@ -1,7 +1,7 @@
-def make_model_code(family = "gaussian", 
-                    prior = "normal", 
-                    ss_type = "ssvs", 
-                    pi = 0.5):
+def make_model_code(family: str="gaussian", 
+                    prior: str="normal", 
+                    ss_type: str="ssvs", 
+                    pi: float=0.5) -> str:
     if family == "gaussian":
         lik = '''
         model{
