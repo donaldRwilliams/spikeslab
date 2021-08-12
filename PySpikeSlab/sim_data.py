@@ -88,5 +88,5 @@ def simulate_data(p = 10, n = 200, cors = None, prob = 0.2,
         
         y = alpha + X @ betas + np.random.normal(0, sigma, n)
     
-    return simdata(y_ = y, _X = X, _betas = betas, _alpha = alpha)
+    return simdata(_y = y, _X = X, _betas = betas, _alpha = alpha)
     
